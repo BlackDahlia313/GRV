@@ -3,8 +3,8 @@ const route = useRoute();
 const { arraysEqual, formatArray, checkForVariationTypeOfAny } = useHelpers();
 const { addToCart, isUpdatingCart } = useCart();
 
-const { data } = await useAsyncGql('getProduct', { slug: route.params.slug as string });
-const product = data?.value?.product as Product;
+const { data } = (await useAsyncGql('getProduct', { slug: route.params.slug })) as { data: { value: { product: Product } } };
+const product = data?.value?.product;
 
 useHead({
   title: product?.name || 'Product',
@@ -18,7 +18,6 @@ const indexOfTypeAny = [] as number[];
 const attrValues = ref();
 
 const type = computed(() => (activeVariation.value ? activeVariation.value : product)) as ComputedRef<Product | Variation>;
-const primaryCategory = computed(() => product.productCategories?.nodes[0]);
 const selectProductInput = computed(() => ({ productId: type.value.databaseId, quantity: quantity.value })) as ComputedRef<AddToCartInput>;
 const disabledAddToCart = computed(() => (!activeVariation.value && !!product.variations) || type.value.stockStatus !== 'IN_STOCK');
 
@@ -31,7 +30,7 @@ const updateSelectedVariations = (variations: Variation[]): void => {
 
   attrValues.value = variations.map((el: Attribute) => ({ attributeName: el.name, attributeValue: el.value }));
   const cloneArray = JSON.parse(JSON.stringify(variations));
-  const getActiveVariation = product.variations.nodes.filter((variation) => {
+  const getActiveVariation = product.variations.nodes.filter((variation: any) => {
     // If there is any variation of type ANY set the value to ''
     if (variation.attributes) {
       indexOfTypeAny.forEach((index) => (cloneArray[index].value = ''));
@@ -48,27 +47,17 @@ const updateSelectedVariations = (variations: Variation[]): void => {
 
 <template>
   <main class="container relative py-6 xl:max-w-7xl" v-if="product">
-    <Breadcrumb
-      v-if="primaryCategory"
-      class="mb-6"
-      :format="[
-        { name: 'Products', slug: '/products' },
-        {
-          name: primaryCategory.name,
-          slug: `/product-category/${primaryCategory.slug}`,
-        },
-        { name: product.name },
-      ]" />
+    <Breadcrumb :product="product" class="mb-6" />
 
     <div class="flex flex-col gap-10 md:flex-row md:justify-between lg:gap-24">
       <ProductImageGallery
-        v-if="product.image"
+        v-if="product.image?.sourceUrl"
         class="relative flex-1"
         :first-image="product.image.sourceUrl"
-        :main-image="type.image ? type.image.sourceUrl : product.image.sourceUrl"
+        :main-image="type.image ? type.image?.sourceUrl || product.image.sourceUrl : '/images/placeholder.jpg'"
         :gallery="product.galleryImages!"
         :node="type" />
-      <img v-else class="relative flex-1" src="/images/placeholder.jpg" :alt="product.name" />
+      <img v-else class="relative flex-1" src="/images/placeholder.jpg" :alt="product?.name || 'Product'" />
 
       <div class="md:max-w-md md:py-2">
         <div class="flex justify-between mb-4">

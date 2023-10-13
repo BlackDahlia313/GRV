@@ -1,12 +1,11 @@
 <script setup lang="ts">
-const { addToList, removeFromList, isInList } = useWishlist();
-const props = defineProps({
-  product: { type: Object, required: true },
-});
+const { addToWishlist, removeFromWishlist, isInList } = useWishlist();
 
-const isWishlisted = computed(() => isInList(props.product.databaseId));
+const { product } = defineProps<{ product: Product }>();
 
-const toggleWishlist = () => (isWishlisted.value ? removeFromList(props.product.databaseId) : addToList(props.product));
+const isWishlisted = computed(() => (product.databaseId ? isInList(product.databaseId) : false));
+
+const toggleWishlist = () => (isWishlisted.value && product.databaseId ? removeFromWishlist(product.databaseId) : addToWishlist(product));
 </script>
 
 <template>
