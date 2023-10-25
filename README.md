@@ -78,11 +78,11 @@ Example: I have created a pages directory and added a `contact.vue` file in the 
 
 | Plugin/Software | Version |
 | --------------- | ------- |
-| WordPress       | 6.3.1   |
-| WooCommerce     | 8.1.1   |
-| WPGraphQL       | 1.16.0  |
-| WooGraphQL      | 0.15.0  |
-| Node            | 16.18.1 |
+| WordPress       | 6.3.2   |
+| WooCommerce     | 8.2.1   |
+| WPGraphQL       | 1.17.0  |
+| WooGraphQL      | 0.18.2  |
+| Node            | 18.17.1 |
 | PHP             | 8.2     |
 
 ### Current translations
