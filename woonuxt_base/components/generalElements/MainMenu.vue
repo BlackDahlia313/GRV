@@ -4,7 +4,6 @@
     <NuxtLink to="/products">{{ $t('messages.general.allProducts') }}</NuxtLink>
     <NuxtLink to="/categories">{{ $t('messages.shop.category', 2) }}</NuxtLink>
     <NuxtLink to="/contact">{{ $t('messages.general.contact') }}</NuxtLink>
-    <NuxtLink to="/campaigns/bidandbuy">{{ $t('messages.general.bidandbuy') }}</NuxtLink>
 
     <NuxtLink class="lg:hidden" to="/wishlist">Wishlist</NuxtLink>
     <NuxtLink class="lg:hidden" to="/my-account">My Account</NuxtLink>
